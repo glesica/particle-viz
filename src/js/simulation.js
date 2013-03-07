@@ -77,10 +77,8 @@ PV.Simulation = function(createOn) {
     this.tick = 0;
 
     // Set up the interface
-    var sim = this;
     $el.append(this._renderer.domElement);
     var $menu = $('<div class="pv-menu"></div>').appendTo($el);
-	
 	var $loadingSubMenu = $('<div class="pv-loadingsubmenu"></div>').appendTo($menu);
 	
 	$menu.append('<div class="pv-playforward">Play</div>');
@@ -88,9 +86,18 @@ PV.Simulation = function(createOn) {
 	$menu.append('<div class="pv-pause">Pause</div>');
 	$menu.append('<div class="pv-stop">Stop</div>');
 	$menu.append('<div class="pv-load">Load</div>');
-	$menu.append('<select id="sim-choice"><option value=""> Select Simulation </option><option value="line.json">line.json</option><option value="2boing.json">2boing.json</option><option value="simple.json">simple.json</option></select>');
-	
-	
+    
+    var sim = this;
+    $.getJSON('../demo/menulist.json', function(data) {
+        sim.simsList = data;
+        var $dropdown = $('<select id="pv-simchoice">');
+        for (i in data) {
+            var choice = $('<option value="' + data[i] + '">' + data[i] + '</option>');
+            choice.appendTo($dropdown);
+        }
+        $menu.append($dropdown);
+    });
+
     var $btnPlayForward = $('.pv-playforward')
         .click(function() {
             sim.playForward();
@@ -111,14 +118,9 @@ PV.Simulation = function(createOn) {
         .click(function() {
             sim.reset();
             //sim.loadFromJSON($('#sim-data').val());
-            var simChoice = $('#sim-choice').val();
-            if (simChoice === 'line.json') {
-                sim.loadFromRemoteJSON('../demo/line.json');
-            } else if (simChoice === '2boing.json') {
-                sim.loadFromRemoteJSON('../demo/2boing.json');
-            } else if (simChoice === 'simple.json') {
-                sim.loadFromRemoteJSON('../demo/simple.json');
-            }
+            var simChoice = $('#pv-simchoice').val();
+            sim.loadFromRemoteJSON('../demo/' + simChoice);
+            console.log('Loading "../demo/' + simChoice + '"');
         });
 	
 	return this;
