@@ -59,6 +59,7 @@ PV.Simulation = function(createOn) {
 
     this._draw = function() {
         this._renderer.render(this._scene, this._camera);
+        this._dpc.update();
     };
 
     // Bookkeeping
@@ -122,6 +123,9 @@ PV.Simulation = function(createOn) {
             sim.loadFromRemoteJSON('../demo/' + simChoice);
             console.log('Loading "../demo/' + simChoice + '"');
         });
+
+    // Set up the drag and pan controls
+    this._dpc = new THREEx.DragPanControls(this._camera, this._renderer.domElement);
 	
 	return this;
 };
