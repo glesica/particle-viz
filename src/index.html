@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jsParticleViewer Demo</title>
+        <meta charset="utf-8">
+        <!-- Libraries -->
+        <script src="https://raw.github.com/mrdoob/three.js/master/build/three.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.js"></script>
+        <!-- Source -->
+        <link type="text/css" rel="stylesheet" href="css/simulation.css" />
+        <script type="text/javascript" src="js/simulation.js"></script>
+    </head>
+    <body>
+        <h1>jsParticleViz</h1>
+        <div id="viz"></div>
+<!--        <h2>Data Input</h2>
+        <p>Paste your JSON file contents here then hit Reload.</p>
+        <textarea id="sim-data"></textarea>
+-->
+        <h2>Simulation Select</h2>
+        <p>Choose a demo simulation to visualize and then hit "Reload".</p>
+        <select id="sim-choice">
+            <option value="line.json">line.json</option>
+            <option value="2boing.json">2boing.json</option>
+            <option value="simple.json">simple.json</option>
+        </select>
+        <script type="text/javascript">
+            var $container = $('#viz');
+            var sim = new PV.Simulation($container);
+            sim.run();
+        </script>
+    </body>
+</html>
