@@ -17,17 +17,9 @@
         <p>Paste your JSON file contents here then hit Reload.</p>
         <textarea id="sim-data"></textarea>
 -->
-        <h2>Simulation Select</h2>
-        <p>Choose a demo simulation to visualize and then hit "Reload".</p>
-        <select id="sim-choice">
-            <option value="line.json">line.json</option>
-            <option value="2boing.json">2boing.json</option>
-            <option value="simple.json">simple.json</option>
-        </select>
+        
         <script type="text/javascript">
-            var $container = $('#viz');
-            var sim = new PV.Simulation($container);
-            sim.run();
+            var sim = new PV.Simulation('viz').run();
         </script>
     </body>
 </html>

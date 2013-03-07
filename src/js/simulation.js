@@ -36,7 +36,10 @@ PV.defaults = {
     cameraZ     : 10.0
 };
 
-PV.Simulation = function($el) {
+PV.Simulation = function(createOn) {
+
+	$el = $('#'+createOn);
+
     // TODO: Fallback to canvas for non-WebGL browsers
     this._renderer = new THREE.WebGLRenderer({
         antialias: true
@@ -76,41 +79,49 @@ PV.Simulation = function($el) {
     // Set up the interface
     var sim = this;
     $el.append(this._renderer.domElement);
-    var $menu = $('<div class="pv-menu">').appendTo($el);
-    var $btnPlayForward = $('<div class="pv-playforward">Play</div>')
+    var $menu = $('<div class="pv-menu"></div>').appendTo($el);
+	
+	var $loadingSubMenu = $('<div class="pv-loadingsubmenu"></div>').appendTo($menu);
+	
+	$menu.append('<div class="pv-playforward">Play</div>');
+	$menu.append('<div class="pv-playbackward">Reverse</div>');
+	$menu.append('<div class="pv-pause">Pause</div>');
+	$menu.append('<div class="pv-stop">Stop</div>');
+	$menu.append('<div class="pv-load">Load</div>');
+	$menu.append('<select id="sim-choice"><option value=""> Select Simulation </option><option value="line.json">line.json</option><option value="2boing.json">2boing.json</option><option value="simple.json">simple.json</option></select>');
+	
+	
+    var $btnPlayForward = $('.pv-playforward')
         .click(function() {
             sim.playForward();
-        })
-        .appendTo($menu);
-    var $btnPlayBackward = $('<div class="pv-playbackward">Reverse</div>')
+        });
+    var $btnPlayBackward = $('.pv-playbackward')
         .click(function() {
             sim.playBackward();
-        })
-        .appendTo($menu);
-    var $btnPause = $('<div class="pv-pause">Pause</div>')
+        });
+    var $btnPause = $('.pv-pause')
         .click(function() {
             sim.pause();
-        })
-        .appendTo($menu);
-    var $btnStop = $('<div class="pv-stop">Stop</div>')
+        });
+    var $btnStop = $('pv-stop')
         .click(function() {
             sim.stop();
-        })
-        .appendTo($menu);
-    var $btnReload = $('<div class="pv-reload">Reload</div>')
+        });
+    var $btnReload = $('.pv-load')
         .click(function() {
             sim.reset();
             //sim.loadFromJSON($('#sim-data').val());
             var simChoice = $('#sim-choice').val();
             if (simChoice === 'line.json') {
-                sim.loadFromRemoteJSON('demo/line.json');
+                sim.loadFromRemoteJSON('../demo/line.json');
             } else if (simChoice === '2boing.json') {
-                sim.loadFromRemoteJSON('demo/2boing.json');
+                sim.loadFromRemoteJSON('../demo/2boing.json');
             } else if (simChoice === 'simple.json') {
-                sim.loadFromRemoteJSON('demo/simple.json');
+                sim.loadFromRemoteJSON('../demo/simple.json');
             }
-        })
-        .appendTo($menu);
+        });
+	
+	return this;
 };
 
 /*
