@@ -103,7 +103,7 @@ PV.Simulation = function(createOn) {
         .click(function() {
             sim.pause();
         });
-    var $btnStop = $('pv-stop')
+    var $btnStop = $('.pv-stop')
         .click(function() {
             sim.stop();
         });
