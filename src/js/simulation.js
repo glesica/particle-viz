@@ -103,11 +103,11 @@ PV.Simulation = function($el) {
             //sim.loadFromJSON($('#sim-data').val());
             var simChoice = $('#sim-choice').val();
             if (simChoice === 'line.json') {
-                sim.loadFromRemoteJSON('line.json');
+                sim.loadFromRemoteJSON('demo/line.json');
             } else if (simChoice === '2boing.json') {
-                sim.loadFromRemoteJSON('2boing.json');
+                sim.loadFromRemoteJSON('demo/2boing.json');
             } else if (simChoice === 'simple.json') {
-                sim.loadFromRemoteJSON('simple.json');
+                sim.loadFromRemoteJSON('demo/simple.json');
             }
         })
         .appendTo($menu);
