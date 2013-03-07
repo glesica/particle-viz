@@ -67,7 +67,6 @@ PV.Simulation = function(createOn) {
     this.playing = false;
     this.forward = true;
     this.speed = 1;
-    this.fps = 30;
     this.wireframe = true;
     this.zoom = 1.0 // scalar multiplier for camera position
 
@@ -174,18 +173,20 @@ PV.Simulation.prototype.setTick = function(t) {
 /*
  * Advance the visualization by one tick.
  */
-PV.Simulation.prototype.tickForward = function() {
+PV.Simulation.prototype.tickForward = function(n) {
+    var ticks = n || 1;
     if (this.tick < this.states.length - 1) {
-        this.setTick(this.tick + 1);
+        this.setTick(this.tick + ticks);
     }
 };
 
 /*
  * Back up the visualization by one tick.
  */
-PV.Simulation.prototype.tickBackward = function() {
+PV.Simulation.prototype.tickBackward = function(n) {
+    var ticks = n || 1;
     if (this.tick > 0) {
-        this.setTick(this.tick - 1);
+        this.setTick(this.tick - ticks);
     }
 };
 
@@ -388,18 +389,17 @@ PV.Simulation.prototype.setBoundingBox = function() {
 PV.Simulation.prototype.run = function() {
     var sim = this;
     function animate() {
-        setTimeout(function() {
-            requestAnimationFrame(animate);
-            if (sim.playing) {
-                if (sim.forward === true) {
-                    sim.tickForward();
-                } else {
-                    sim.tickBackward();
-                }
+        requestAnimationFrame(animate);
+        if (sim.playing) {
+            if (sim.forward === true) {
+                sim.tickForward(sim.speed);
+            } else {
+                sim.tickBackward(sim.speed);
             }
-        }, 1000 / sim.fps * sim.speed);
+        }
     }
     animate();
+    return this;
 }
 
 
