@@ -32,6 +32,20 @@ canvas {
 	border-radius: 3px;
 }
 
+#pv-progressbarcontainer, #pv-progressbar{
+	height: 20px;
+}
+
+#pv-progressbarcontainer{
+	padding: 0.5em;
+	cursor:pointer;
+}
+
+#pv-progressbar{
+	width: 0;
+	background-color: #F6FF00;
+}
+
 .pv-playbackward {
     background-color: rgb(0, 175, 0);
 }
