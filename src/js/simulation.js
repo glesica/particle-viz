@@ -79,7 +79,8 @@ PV.Simulation = function(createOn) {
     // Set up the interface
     $el.append(this._renderer.domElement);
     var $menu = $('<div class="pv-menu"></div>').appendTo($el);
-	var $loadingSubMenu = $('<div class="pv-loadingsubmenu"></div>').appendTo($menu);
+	
+	this.progressBar.init(this, $el);
 	
 	$menu.append('<div class="pv-playforward">Play</div>');
 	$menu.append('<div class="pv-playbackward">Reverse</div>');
@@ -97,6 +98,7 @@ PV.Simulation = function(createOn) {
         }
         $menu.append($dropdown);
     });
+	
 
     var $btnPlayForward = $('.pv-playforward')
         .click(function() {
@@ -262,6 +264,7 @@ PV.Simulation.prototype.loadFromObject = function(data) {
     }
     this.setBoundingBox();
     this._draw();
+	this.progressBar.load(this.states.length);
 };
 
 /*
@@ -313,6 +316,7 @@ PV.Simulation.prototype.stop = function() {
     this.playing = false;
     this.forward = true;
     this.setTick(0);
+	this.progressBar.stop();
 };
 
 /*
@@ -393,13 +397,104 @@ PV.Simulation.prototype.run = function() {
         if (sim.playing) {
             if (sim.forward === true) {
                 sim.tickForward(sim.speed);
+				sim.progressBar.tickForward();
             } else {
                 sim.tickBackward(sim.speed);
+				sim.progressBar.tickBackward();
             }
         }
     }
     animate();
     return this;
+}
+
+/*
+* Object for the progress bar
+*/
+PV.Simulation.prototype.progressBar = {	
+	
+	/*
+	*  Initialization function for the progress bar
+	*/
+	init:function(simulation, $el){
+		this.sim = simulation;
+		this.$progressContainer = $('<div id="pv-progressbarcontainer"></div>').appendTo($el);
+		this.$progressBar = $('<div id="pv-progressbar"></div>').appendTo(this.$progressContainer);
+		this.setClick();
+	},
+	
+	/*
+	*	Sets the necessary amounts for when a particular file is loaded
+	*/
+	load:function(amountOfStates){
+		this._resetProgressBar();
+		this.maxWidth = this.$progressContainer.css('width').replace("px", "");
+		this.stepAmount = this.maxWidth / amountOfStates;
+	},
+	
+	/*
+	* Binds clicking on the progress bar
+	*/
+	setClick:function(){
+		var self = this;
+		this.$progressContainer.click(function(e){
+			var offset = $(this).offset();
+			self.handleClick(e.clientX - offset.left);
+		});
+	},
+	
+	/*
+	* Handles clicking on the progress bar
+	*/
+	handleClick:function(x){
+		if(sim.states !== undefined && sim.states.length > 0){
+			this.sim.setTick(Math.floor((x/this.maxWidth)*sim.states.length));
+			this.progressBarWidth = x;
+			this._setProgressBar(x);
+		}
+	},
+	
+	/*
+	* Ticks the progress bar forward
+	*/
+	tickForward:function(){
+		if(this.progressBarWidth < this.maxWidth){		
+			this.progressBarWidth += this.stepAmount;
+			this._setProgressBar(this.progressBarWidth);
+		}
+	},
+	
+	/*
+	* Ticks the progress bar backwards
+	*/
+	tickBackward:function(){
+		if(this.progressBarWidth > 0){		
+			this.progressBarWidth -= this.stepAmount;
+			this._setProgressBar(this.progressBarWidth);
+		}
+	},
+	
+	/*
+	* Stops the progress bar - basically a reset
+	*/
+	stop:function(){
+		this._resetProgressBar();
+	},
+	
+	/*
+	*	Sets the width of the progressbar
+	*/
+	_setProgressBar:function(width){
+		this.$progressBar.css('width', width);
+	},
+	
+	/*
+	* Resets the progress bar
+	*/
+	_resetProgressBar:function(){
+		this.progressBarWidth = 0;
+		this._setProgressBar(this.progressBarWidth);
+	}
 }
 
 
