@@ -1,13 +1,16 @@
 [
-    "2boing.json",
-    "eight.json",
-    "four.json",
-    "line.json",
-    "one.json",
-    "simple",
-    "six.json",
-    "square_lattice.json",
-    "three.json",
-    "triangular_lattice.json",
-    "two.json"
+    "2boinglx120.json",
+    "boxlx120.json",
+    "eightlx120.json",
+    "fourlx120.json",
+    "linelx120.json",
+    "onelx120.json",
+    "sixlx120.json",
+    "square_latticelx90.json",
+    "square_latticelx120.json",
+    "threelx120.json",
+    "triangular_latticelx80.json",
+    "triangular_latticelx90.json",
+    "triangular_latticelx120.json",
+    "twolx120.json"
 ]
