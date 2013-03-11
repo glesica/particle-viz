@@ -6,11 +6,20 @@
     "linelx120.json",
     "onelx120.json",
     "sixlx120.json",
-    "square_latticelx90.json",
-    "square_latticelx120.json",
     "threelx120.json",
-    "triangular_latticelx80.json",
-    "triangular_latticelx90.json",
-    "triangular_latticelx120.json",
-    "twolx120.json"
+    "twolx120.json",
+    
+    "square_latticelx80.0.json",
+    "square_latticelx90.0.json",
+    "square_latticelxran.180.0.json",
+    "square_latticelxran.190.0.json",
+    "square_latticelxran.580.0.json",
+    "square_latticelxran.590.0.json",
+    
+    "triangular_latticelx80.0.json",
+    "triangular_latticelx90.0.json",
+    "triangular_latticelxran.180.0.json",
+    "triangular_latticelxran.190.0.json",
+    "triangular_latticelxran.580.0.json",
+    "triangular_latticelxran.590.0.json"
 ]
