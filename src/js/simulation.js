@@ -59,8 +59,9 @@ PV.Simulation = function(createOn) {
 
     this._draw = function() {
         this._renderer.render(this._scene, this._camera);
-        this._dpc.update();
     };
+
+    this._origin = new THREE.Vector3(0, 0, 0);
 
     // Bookkeeping
     // TODO: Move this stuff to reset method
@@ -87,6 +88,7 @@ PV.Simulation = function(createOn) {
 	$menu.append('<div class="pv-pause">Pause</div>');
 	$menu.append('<div class="pv-stop">Stop</div>');
 	$menu.append('<div class="pv-load">Load</div>');
+    $menu.append('<select id="pv-cam">');
     
     var sim = this;
     $.getJSON('../demo/menulist.json', function(data) {
@@ -98,7 +100,6 @@ PV.Simulation = function(createOn) {
         }
         $menu.append($dropdown);
     });
-	
 
     var $btnPlayForward = $('.pv-playforward')
         .click(function() {
@@ -124,10 +125,14 @@ PV.Simulation = function(createOn) {
             sim.loadFromRemoteJSON('../demo/' + simChoice);
             console.log('Loading "../demo/' + simChoice + '"');
         });
+    
+    $('#pv-cam')
+        .append('<option value="upper-right">Upper Right</option>')
+        .append('<option value="front">Front View</option>')
+        .change(function() {
+            sim.setCameraView($(this).val());
+        });
 
-    // Set up the drag and pan controls
-    this._dpc = new THREEx.DragPanControls(this._camera, this._renderer.domElement);
-	
 	return this;
 };
 
@@ -379,12 +384,38 @@ PV.Simulation.prototype.setBoundingBox = function() {
     );
     this._scene.add(this.boundingBox);
 
+    // Record the extents for setting camera later
+    this.minX = minX;
+    this.maxX = maxX;
+    this.minY = minY;
+    this.maxY = maxY;
+    this.minZ = minZ;
+    this.maxZ = maxZ;
+
+    this.sizeX = maxX - minX;
+    this.sizeY = maxY - minY;
+    this.sizeZ = maxZ - minZ;
+
     // Set the camera to something sane
-    this._camera.position = new THREE.Vector3(maxX + 6, maxY + 6, maxZ + 11);
-    this._camera.lookAt(
-        new THREE.Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2)
-    );
-}
+    this._origin.set((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+    this.setCameraView('upper-right');
+};
+
+/*
+ * Set camera to a predefined location.
+ */
+PV.Simulation.prototype.setCameraView = function(view) {
+    switch (view) {
+        case 'upper-right':
+            this._camera.position.set(this.maxX + 6, this.maxY + 6, this.maxZ + 11);
+            break;
+        case 'front':
+            var dim = Math.max(this.sizeX, this.sizeY);
+            this._camera.position.set(0, 0, dim / Math.tan(Math.PI / 8));
+            break;
+    }
+    this._camera.lookAt(this._origin);
+};
 
 /*
  * Start the visualization running. This should be done after everything has
